@@ -1,0 +1,4 @@
+(library
+ (name volatility_engine)
+ (libraries core owl base stdio yojson)
+ (preprocess (pps ppx_jane)))

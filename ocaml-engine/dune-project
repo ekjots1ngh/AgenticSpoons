@@ -1,0 +1,17 @@
+(lang dune 3.0)
+(name advanced_volatility)
+
+(generate_opam_files true)
+
+(source (github ekjots1ngh/AgenticSpoons))
+(license MIT)
+(authors "Ekjot Singh")
+(maintainers "ekjot@example.com")
+
+(package
+ (name advanced_volatility)
+ (synopsis "High-performance volatility models in OCaml")
+ (description "Advanced GARCH, Heston, and jump detection models")
+ (depends
+  dune
+  (ocaml (>= 4.14))))

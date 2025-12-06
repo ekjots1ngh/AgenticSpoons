@@ -1,0 +1,3 @@
+(executable
+ (name advanced_volatility)
+ (public_name advanced_volatility))

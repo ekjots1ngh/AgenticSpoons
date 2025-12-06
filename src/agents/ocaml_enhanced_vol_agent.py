@@ -9,8 +9,8 @@ from loguru import logger
 
 from .base_agent import BaseAgent
 from .market_data_agent import MarketDataAgent
-from utils.ocaml_bridge import ocaml_engine
-from utils.database import AgentSpoonsDB
+from src.utils.ocaml_bridge import ocaml_engine
+from src.utils.database import AgentSpoonsDB
 
 class OCamlVolatilityAgent(BaseAgent):
     """High-performance volatility calculator using OCaml"""
@@ -61,7 +61,7 @@ class OCamlVolatilityAgent(BaseAgent):
                     
                 else:
                     # Fallback to Python
-                    from models.volatility_engine import VolatilityEngine
+                    from src.models.volatility_engine import VolatilityEngine
                     engine = VolatilityEngine(df)
                     vol_metrics = {
                         'timestamp': datetime.now().isoformat(),

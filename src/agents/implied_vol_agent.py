@@ -9,8 +9,8 @@ from loguru import logger
 
 from .base_agent import BaseAgent
 from .market_data_agent import MarketDataAgent
-from models.black_scholes import BlackScholesEngine
-from models.volatility_surface import VolatilitySurface
+from src.models.black_scholes import BlackScholesEngine
+from src.models.volatility_surface import VolatilitySurface
 
 class ImpliedVolAgent(BaseAgent):
     """Calculates implied volatility surfaces and option Greeks"""

@@ -12,7 +12,7 @@ import pandas as pd
 import sys
 sys.path.append('..')
 
-from utils.database import AgentSpoonsDB
+from src.utils.database import AgentSpoonsDB
 
 # Initialize
 app = dash.Dash(__name__, suppress_callback_exceptions=True)

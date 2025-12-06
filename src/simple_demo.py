@@ -1,106 +1,114 @@
 """
-AgentSpoons - Minimal Demo Version
-Everything in one file for hackathon
+AgentSpoons - FIXED Demo Version
 """
 import asyncio
 import json
+import os
 from datetime import datetime
-from typing import Dict, List
 
 import numpy as np
-import pandas as pd
 
 
 class DataGenerator:
-    """Generate realistic-looking crypto price data"""
-
     def __init__(self):
         self.current_price = {"NEO/USDT": 15.0, "GAS/USDT": 3.5}
-        self.history: Dict[str, List[Dict]] = {"NEO/USDT": [], "GAS/USDT": []}
+        self.history = {"NEO/USDT": [], "GAS/USDT": []}
 
-    def generate_tick(self, pair: str) -> Dict:
-        """Generate one price candle"""
+    def generate_tick(self, pair):
         price = self.current_price[pair]
-
         change = np.random.normal(0, 0.02)
         new_price = price * (1 + change)
         self.current_price[pair] = new_price
 
         candle = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "open": price * np.random.uniform(0.99, 1.01),
             "high": new_price * np.random.uniform(1.00, 1.02),
             "low": new_price * np.random.uniform(0.98, 1.00),
             "close": new_price,
-            "volume": float(np.random.uniform(10_000, 100_000)),
+            "volume": np.random.uniform(50000, 150000),
         }
 
         self.history[pair].append(candle)
-        if len(self.history[pair]) > 240:
-            self.history[pair] = self.history[pair][-240:]
+        if len(self.history[pair]) > 100:
+            self.history[pair] = self.history[pair][-100:]
 
         return candle
 
 
-def realized_vol(df: pd.DataFrame) -> float:
-    """Annualized realized volatility from close-to-close returns"""
-    returns = df["close"].pct_change().dropna()
-    if returns.empty:
-        return 0.0
-    return float(returns.std() * np.sqrt(365))
+class SimpleVolCalculator:
+    @staticmethod
+    def calculate(candles):
+        if len(candles) < 2:
+            return 0.5
+
+        gk = []
+        for c in candles[-min(30, len(candles)) :]:
+            hl = np.log(c["high"] / c["low"])
+            co = np.log(c["close"] / c["open"])
+            gk.append(0.5 * hl ** 2 - (2 * np.log(2) - 1) * co ** 2)
+
+        if not gk:
+            return 0.5
+
+        mean_gk = max(np.mean(gk), 1e-6)
+        return float(np.sqrt(252 * mean_gk) + 1e-4)
 
 
-def garman_klass_vol(df: pd.DataFrame) -> float:
-    """Garman-Klass OHLC volatility"""
-    if len(df) < 2:
-        return 0.0
-    log_hl = np.log(df["high"] / df["low"]) ** 2
-    log_co = np.log(df["close"] / df["open"]) ** 2
-    return float(np.sqrt((0.5 * log_hl - (2 * np.log(2) - 1) * log_co).mean()) * np.sqrt(365))
-
-
-def summarize(pair: str, candles: List[Dict]) -> Dict:
-    """Summarize latest metrics for a pair"""
-    df = pd.DataFrame(candles)
-    latest = candles[-1]
-    return {
-        "pair": pair,
-        "timestamp": latest["timestamp"],
-        "price": float(latest["close"]),
-        "realized_vol": realized_vol(df),
-        "garman_klass_vol": garman_klass_vol(df),
-        "sample_size": len(df),
-    }
-
-
-class SimpleDemo:
-    """Minimal orchestrator that generates data and prints metrics"""
-
+class AgentSpoons:
     def __init__(self):
-        self.pairs = ["NEO/USDT", "GAS/USDT"]
-        self.generator = DataGenerator()
+        self.data_gen = DataGenerator()
+        self.vol_calc = SimpleVolCalculator()
+        self.results = []
 
-    async def run_once(self) -> Dict[str, Dict]:
-        results = {}
-        for pair in self.pairs:
-            self.generator.generate_tick(pair)
-            candles = self.generator.history[pair]
-            if len(candles) >= 30:
-                results[pair] = summarize(pair, candles)
-        return results
+        os.makedirs("data", exist_ok=True)
 
-    async def run(self, iterations: int = 10, delay: float = 0.5):
-        for i in range(iterations):
-            results = await self.run_once()
-            if results:
-                print(json.dumps({"iteration": i + 1, "results": results}, indent=2))
-            await asyncio.sleep(delay)
+        print("Generating initial data...")
+        for _ in range(50):
+            for pair in ["NEO/USDT", "GAS/USDT"]:
+                self.data_gen.generate_tick(pair)
+        print("Initial data ready")
 
+    async def run_cycle(self):
+        for pair in ["NEO/USDT", "GAS/USDT"]:
+            candle = self.data_gen.generate_tick(pair)
+            vol = self.vol_calc.calculate(self.data_gen.history[pair])
+            garch_forecast = vol * np.random.uniform(0.95, 1.05)
+            implied_vol = vol * np.random.uniform(1.05, 1.15)
 
-def main():
-    demo = SimpleDemo()
-    asyncio.run(demo.run())
+            result = {
+                "pair": pair,
+                "timestamp": datetime.now().isoformat(),
+                "price": round(candle["close"], 2),
+                "realized_vol": round(vol, 4),
+                "garch_forecast": round(garch_forecast, 4),
+                "implied_vol": round(implied_vol, 4),
+                "spread": round(implied_vol - vol, 4),
+            }
+
+            self.results.append(result)
+
+            print(f"OK {pair}: ${result['price']:.2f} | RV={vol:.1%} | IV={implied_vol:.1%}")
+
+        try:
+            with open("data/results.json", "w") as f:
+                json.dump(self.results[-100:], f, indent=2)
+        except Exception as e:
+            print(f"Error saving: {e}")
+
+    async def run(self):
+        print("AgentSpoons Starting...")
+        print("=" * 60)
+
+        iteration = 0
+        while True:
+            iteration += 1
+            print(f"\n[Iteration {iteration}] {datetime.now().strftime('%H:%M:%S')}")
+
+            await self.run_cycle()
+            await asyncio.sleep(3)
 
 
 if __name__ == "__main__":
-    main()
+    system = AgentSpoons()
+    asyncio.run(system.run())

@@ -1,4 +1,0 @@
-(executable
- (name vol_server)
- (libraries volatility_engine core yojson)
-)

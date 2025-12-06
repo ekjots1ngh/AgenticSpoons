@@ -9,7 +9,7 @@ import numpy as np
 from loguru import logger
 
 from .base_agent import BaseAgent
-from utils.database import AgentSpoonsDB
+from src.utils.database import AgentSpoonsDB
 
 class MarketDataAgent(BaseAgent):
     """Collects price data from Neo DEXs"""

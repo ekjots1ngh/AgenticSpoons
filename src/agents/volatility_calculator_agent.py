@@ -9,9 +9,9 @@ from loguru import logger
 
 from .base_agent import BaseAgent
 from .market_data_agent import MarketDataAgent
-from models.volatility_engine import VolatilityEngine
-from models.garch_forecaster import GARCHForecaster
-from utils.database import AgentSpoonsDB
+from src.models.volatility_engine import VolatilityEngine
+from src.models.garch_forecaster import GARCHForecaster
+from src.utils.database import AgentSpoonsDB
 
 class VolatilityCalculatorAgent(BaseAgent):
     """Calculates various volatility metrics from market data"""

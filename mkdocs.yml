@@ -1,0 +1,58 @@
+site_name: AgentSpoons Documentation
+site_description: Decentralized Volatility Oracle on Neo Blockchain
+site_author: Ekjot Singh
+repo_url: https://github.com/yourusername/agentspoons
+repo_name: GitHub
+
+theme:
+  name: material
+  palette:
+    primary: blue
+    accent: cyan
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+    - Configuration: getting-started/configuration.md
+  - Architecture:
+    - Overview: architecture/overview.md
+    - Multi-Agent System: architecture/agents.md
+    - Neo Integration: architecture/neo.md
+  - Models:
+    - Volatility Estimators: models/volatility.md
+    - GARCH: models/garch.md
+    - Black-Scholes: models/black-scholes.md
+    - Machine Learning: models/ml.md
+  - API Reference:
+    - REST API: api/rest.md
+    - WebSocket: api/websocket.md
+    - Python SDK: api/python.md
+  - Performance:
+    - Benchmarks: performance/benchmarks.md
+    - Optimization: performance/optimization.md
+  - Deployment:
+    - Docker: deployment/docker.md
+    - Production: deployment/production.md
+  - Research:
+    - Technical Paper: research/paper.md
+    - Backtesting Results: research/backtesting.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+  - admonition
+  - tables
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js

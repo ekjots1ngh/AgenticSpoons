@@ -1,12 +1,19 @@
 """
 Interactive Options Greeks Visualization
 """
+import sys
+from pathlib import Path
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 import numpy as np
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
+from scipy.stats import norm
 
 class GreeksVisualizer:
     """Visualize all Option Greeks"""
@@ -19,19 +26,42 @@ class GreeksVisualizer:
         self.sigma = sigma
     
     def calculate_greeks(self, S, K, T, r, sigma):
-        """Calculate all Greeks"""
-        from src.models.black_scholes import BlackScholesModel
+        """Calculate all Greeks using Black-Scholes formulas"""
+        # Avoid numerical issues
+        if T <= 0 or sigma <= 0:
+            return {
+                'call_price': max(S - K, 0),
+                'put_price': max(K - S, 0),
+                'delta': 1.0 if S > K else 0.0,
+                'gamma': 0.0,
+                'vega': 0.0,
+                'theta': 0.0,
+                'rho': 0.0
+            }
         
-        bs = BlackScholesModel(S, K, T, r, sigma)
+        # Calculate d1 and d2
+        d1 = (np.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*np.sqrt(T))
+        d2 = d1 - sigma*np.sqrt(T)
+        
+        # Prices
+        call_price = S * norm.cdf(d1) - K * np.exp(-r*T) * norm.cdf(d2)
+        put_price = K * np.exp(-r*T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+        
+        # Greeks
+        delta = norm.cdf(d1)
+        gamma = norm.pdf(d1) / (S * sigma * np.sqrt(T))
+        vega = S * norm.pdf(d1) * np.sqrt(T)
+        theta = (-(S * norm.pdf(d1) * sigma) / (2 * np.sqrt(T)) - r * K * np.exp(-r*T) * norm.cdf(d2)) / 365
+        rho = K * T * np.exp(-r*T) * norm.cdf(d2) / 100
         
         return {
-            'call_price': bs.call_price(),
-            'put_price': bs.put_price(),
-            'delta': bs.delta(option_type='call'),
-            'gamma': bs.gamma(),
-            'vega': bs.vega(),
-            'theta': bs.theta(option_type='call'),
-            'rho': bs.rho(option_type='call')
+            'call_price': float(call_price),
+            'put_price': float(put_price),
+            'delta': float(delta),
+            'gamma': float(gamma),
+            'vega': float(vega),
+            'theta': float(theta),
+            'rho': float(rho)
         }
     
     def create_delta_surface(self):
@@ -232,36 +262,6 @@ class GreeksVisualizer:
         )
         
         return fig
-    
-    def create_rho_chart(self):
-        """Rho vs interest rate"""
-        rates = np.linspace(0.0, 0.10, 50)
-        rhos = []
-        
-        for r in rates:
-            greeks = self.calculate_greeks(self.S0, self.K, self.T, r, self.sigma)
-            rhos.append(greeks['rho'])
-        
-        fig = go.Figure()
-        
-        fig.add_trace(go.Scatter(
-            x=rates * 100,
-            y=rhos,
-            mode='lines+markers',
-            name='Rho',
-            line=dict(color='#ff6b6b', width=3),
-            marker=dict(size=6)
-        ))
-        
-        fig.update_layout(
-            title='Rho vs Interest Rate',
-            xaxis_title='Interest Rate %',
-            yaxis_title='Rho',
-            template='plotly_dark',
-            height=400
-        )
-        
-        return fig
 
 # Create standalone dashboard
 def create_greeks_app():
@@ -273,60 +273,21 @@ def create_greeks_app():
     app.layout = dbc.Container(fluid=True, children=[
         dbc.Row([
             dbc.Col([
-                html.H1('📊 Options Greeks Visualizer', 
+                html.H1('Options Greeks Visualizer', 
                        style={'color': '#00d4ff', 'textAlign': 'center', 'marginTop': '20px'})
             ])
         ]),
         
         dbc.Row([
             dbc.Col([
-                html.H4('Parameters:', style={'color': '#51cf66', 'marginTop': '20px'}),
-                html.P(f'Spot: ${visualizer.S0} | Strike: ${visualizer.K} | ' + 
-                      f'Time: {visualizer.T*365:.0f} days | Vol: {visualizer.sigma*100:.0f}%',
-                      style={'color': 'white'})
-            ])
-        ]),
-        
-        dbc.Row([
-            dbc.Col([
-                html.H3('3D Delta Surface', style={'color': '#ffd43b', 'marginTop': '30px'}),
                 dcc.Graph(figure=visualizer.create_delta_surface())
             ], width=12)
         ]),
         
         dbc.Row([
             dbc.Col([
-                html.H3('All Greeks', style={'color': '#ffd43b', 'marginTop': '30px'}),
                 dcc.Graph(figure=visualizer.create_comprehensive_dashboard())
             ], width=12)
-        ]),
-        
-        dbc.Row([
-            dbc.Col([
-                dcc.Graph(figure=visualizer.create_gamma_profile())
-            ], width=6),
-            dbc.Col([
-                dcc.Graph(figure=visualizer.create_theta_decay())
-            ], width=6)
-        ]),
-        
-        dbc.Row([
-            dbc.Col([
-                dcc.Graph(figure=visualizer.create_vega_chart())
-            ], width=6),
-            dbc.Col([
-                dcc.Graph(figure=visualizer.create_rho_chart())
-            ], width=6)
-        ]),
-        
-        dbc.Row([
-            dbc.Col([
-                html.Footer([
-                    html.Hr(),
-                    html.P('Built for Neo Blockchain Hackathon 2025 🚀',
-                          style={'textAlign': 'center', 'color': '#888', 'marginTop': '40px'})
-                ])
-            ])
         ])
     ])
     
@@ -334,17 +295,5 @@ def create_greeks_app():
 
 if __name__ == "__main__":
     app = create_greeks_app()
-    print("\n" + "="*70)
-    print("🚀 Options Greeks Dashboard Starting...")
-    print("="*70)
-    print("\n📊 Dashboard URL: http://localhost:8052")
-    print("\nFeatures:")
-    print("   • 3D Delta Surface")
-    print("   • Comprehensive 4-panel Greeks view")
-    print("   • Gamma Profile (ATM peak)")
-    print("   • Theta Decay (time value erosion)")
-    print("   • Vega Sensitivity (volatility exposure)")
-    print("   • Rho Sensitivity (interest rate risk)")
-    print("\n" + "="*70)
-    
-    app.run_server(debug=False, port=8052, host='127.0.0.1')
+    print("Greeks Dashboard: http://localhost:8052")
+    app.run(debug=False, port=8052)

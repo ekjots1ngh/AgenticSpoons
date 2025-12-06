@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  agentspoons-core:
+    build: .
+    container_name: agentspoons-core
+    ports:
+      - "8050:8050"  # Dashboard
+      - "8000:8000"  # API
+      - "8765:8765"  # WebSocket
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./wallets:/app/wallets
+    environment:
+      - NEO_NETWORK=testnet
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+    command: python src/enhanced_demo.py
+
+  agentspoons-dashboard:
+    build: .
+    container_name: agentspoons-dashboard
+    ports:
+      - "8051:8050"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - agentspoons-core
+    command: python src/championship_dashboard.py
+
+  agentspoons-api:
+    build: .
+    container_name: agentspoons-api
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - agentspoons-core
+    command: python src/api/rest_api.py

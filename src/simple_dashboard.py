@@ -195,10 +195,10 @@ def update(n):
 
 if __name__ == "__main__":
     print("\n" + "=" * 60)
-    print("🚀 AgentSpoons Dashboard Starting...")
+    print("AgentSpoons Dashboard Starting...")
     print("=" * 60)
-    print("📍 Open browser: http://localhost:8050")
-    print("⏱️  Updates every 2 seconds")
+    print("Open browser: http://localhost:8050")
+    print("Updates every 2 seconds")
     print("=" * 60 + "\n")
 
     app.run(debug=False, host="0.0.0.0", port=8050)

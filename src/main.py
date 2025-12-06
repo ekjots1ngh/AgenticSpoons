@@ -1,12 +1,12 @@
 """
-AgentSpoons - Main Entry Point
-Multi-agent volatility oracle system for Neo blockchain
+AgentSpoons - Main Entry Point with Database
 """
 import asyncio
 import sys
 from loguru import logger
 
 from config import config
+from utils.database import AgentSpoonsDB
 from agents.market_data_agent import MarketDataAgent
 from agents.volatility_calculator_agent import VolatilityCalculatorAgent
 from agents.implied_vol_agent import ImpliedVolAgent
@@ -18,7 +18,7 @@ logger.remove()
 logger.add(
     sys.stderr,
     level=config.LOG_LEVEL,
-    format="<green>{time:HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan> - <level>{message}</level>"
+    format="<green>{time:HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan> - <level>{message}</level>"
 )
 logger.add(
     "logs/agentspoons_{time:YYYY-MM-DD}.log",
@@ -28,28 +28,35 @@ logger.add(
 )
 
 async def main():
-    """Main function - orchestrate all agents"""
+    """Main orchestration function"""
     
-    logger.info("=" * 60)
-    logger.info("🥄 AgentSpoons - Decentralized Volatility Oracle")
-    logger.info("=" * 60)
-    logger.info(f"Tracking pairs: {config.TOKEN_PAIRS}")
+    logger.info("=" * 70)
+    logger.info("🥄 AgentSpoons - Decentralized Volatility Oracle for Neo")
+    logger.info("=" * 70)
     logger.info(f"Network: {config.NEO_NETWORK}")
-    logger.info("=" * 60)
+    logger.info(f"Pairs: {config.TOKEN_PAIRS}")
+    logger.info(f"Database: {config.DB_PATH}")
+    logger.info("=" * 70)
+    
+    # Initialize database
+    db = AgentSpoonsDB(config.DB_PATH)
+    logger.success("✓ Database initialized")
     
     # Initialize Agent 1: Market Data Collector
     market_data_agent = MarketDataAgent(
         agent_id="MarketDataCollector",
         wallet_address=config.WALLET_PATH,
         token_pairs=config.TOKEN_PAIRS,
-        dex_endpoints=config.DEX_ENDPOINTS
+        dex_endpoints=config.DEX_ENDPOINTS,
+        db=db
     )
     
     # Initialize Agent 2: Volatility Calculator
     vol_calculator_agent = VolatilityCalculatorAgent(
         agent_id="VolatilityCalculator",
         wallet_address=config.WALLET_PATH,
-        market_data_agent=market_data_agent
+        market_data_agent=market_data_agent,
+        db=db
     )
     
     # Initialize Agent 3: Implied Vol Engine
@@ -78,8 +85,10 @@ async def main():
         contract_hash=""  # Add your Neo contract hash
     )
     
-    logger.info("✓ All agents initialized")
-    logger.info("Starting agent loops...")
+    logger.success("✓ All 5 agents initialized")
+    logger.info("🚀 Starting agent loops...")
+    logger.info("Press Ctrl+C to stop")
+    logger.info("=" * 70)
     
     # Run all agents concurrently
     tasks = [
@@ -93,16 +102,19 @@ async def main():
     try:
         await asyncio.gather(*tasks)
     except KeyboardInterrupt:
-        logger.info("\nShutting down AgentSpoons...")
+        logger.info("\n" + "=" * 70)
+        logger.info("Shutting down AgentSpoons...")
         
-        # Stop all agents gracefully
         market_data_agent.stop()
         vol_calculator_agent.stop()
         implied_vol_agent.stop()
         arbitrage_agent.stop()
         oracle_agent.stop()
         
-        logger.info("✓ All agents stopped")
+        db.close()
+        
+        logger.success("✓ All agents stopped gracefully")
+        logger.info("=" * 70)
 
 if __name__ == "__main__":
     asyncio.run(main())

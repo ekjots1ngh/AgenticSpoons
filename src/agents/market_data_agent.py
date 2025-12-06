@@ -1,5 +1,5 @@
 """
-Market Data Collection Agent
+Market Data Collection Agent - WITH DATABASE
 """
 import asyncio
 from datetime import datetime
@@ -9,16 +9,19 @@ import numpy as np
 from loguru import logger
 
 from .base_agent import BaseAgent
+from utils.database import AgentSpoonsDB
 
 class MarketDataAgent(BaseAgent):
     """Collects price data from Neo DEXs"""
     
     def __init__(self, agent_id: str, wallet_address: str,
-                 token_pairs: List[str], dex_endpoints: List[str]):
+                 token_pairs: List[str], dex_endpoints: List[str],
+                 db: AgentSpoonsDB):
         super().__init__(agent_id, wallet_address)
         self.token_pairs = token_pairs
         self.dex_endpoints = dex_endpoints
         self.price_history = {}
+        self.db = db
         self.execution_interval = 30  # 30 seconds
         
         logger.info(f"Tracking pairs: {token_pairs}")
@@ -37,14 +40,19 @@ class MarketDataAgent(BaseAgent):
                     if pair not in self.price_history:
                         self.price_history[pair] = []
                     
-                    self.price_history[pair].append({
+                    candle = {
                         'timestamp': datetime.now(),
                         'open': aggregated['open'],
                         'high': aggregated['high'],
                         'low': aggregated['low'],
                         'close': aggregated['close'],
                         'volume': aggregated['volume']
-                    })
+                    }
+                    
+                    self.price_history[pair].append(candle)
+                    
+                    # Save to database
+                    self.db.insert_market_data(pair, candle)
                     
                     # Keep last 1000 candles
                     if len(self.price_history[pair]) > 1000:

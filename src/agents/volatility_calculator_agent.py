@@ -11,14 +11,17 @@ from .base_agent import BaseAgent
 from .market_data_agent import MarketDataAgent
 from models.volatility_engine import VolatilityEngine
 from models.garch_forecaster import GARCHForecaster
+from utils.database import AgentSpoonsDB
 
 class VolatilityCalculatorAgent(BaseAgent):
     """Calculates various volatility metrics from market data"""
     
     def __init__(self, agent_id: str, wallet_address: str,
-                 market_data_agent: MarketDataAgent):
+                 market_data_agent: MarketDataAgent,
+                 db: AgentSpoonsDB):
         super().__init__(agent_id, wallet_address)
         self.market_data_agent = market_data_agent
+        self.db = db
         self.volatility_results = {}
         self.execution_interval = 60  # Every 60 seconds
     
@@ -37,6 +40,9 @@ class VolatilityCalculatorAgent(BaseAgent):
                 
                 # Calculate volatilities
                 vol_metrics = await self.calculate_volatilities(df, pair)
+                
+                # Save to database
+                self.db.insert_volatility_metrics(pair, vol_metrics)
                 
                 # Store results
                 results[pair] = vol_metrics

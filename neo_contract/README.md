@@ -1,10 +1,27 @@
 # AgentSpoons Volatility Oracle - Neo N3 Smart Contract
 
-A production-ready smart contract for publishing real-time volatility data to the Neo N3 blockchain.
+A Neo N3 smart contract for publishing real-time volatility data on-chain.
+
+## Status
+
+**Current State**: Development in progress
+- ✅ Neo SDK installed and verified (neo3-lib, neo3-boa v1.4.1, neo3crypto, neo-mamba)
+- ✅ Contract architecture designed
+- 🔧 Compilation: Working with boa3 compiler (resolving type system details)
+- ⏳ Testing: Pending contract deployment on testnet
+- ⏳ Integration: Ready for volatility data pipeline
+
+## Files
+
+- `volatility_oracle.py` - Main contract implementation (in development)
+- `minimal_oracle.py` - Simplified contract for testing compilation
+- `volatility_oracle_simple.py` - Alternative simpler version
+- `compile.py` - Compilation helper script
+- `deploy.py` - Deployment workflow documentation
 
 ## Overview
 
-This contract enables AgentSpoons to publish volatility metrics (realized volatility, implied volatility, and prices) directly on-chain, making them available to DeFi protocols, options platforms, and other smart contracts.
+This contract enables AgentSpoons to publish volatility metrics (realized volatility, implied volatility, and prices) directly on the Neo N3 blockchain, making them available to DeFi protocols, options platforms, and other smart contracts.
 
 ## Features
 
@@ -14,7 +31,7 @@ This contract enables AgentSpoons to publish volatility metrics (realized volati
 - **Query Interface**: Simple methods to read current volatility
 - **Multi-Pair Support**: Handle multiple trading pairs simultaneously
 
-## Contract Methods
+## Contract Methods (Target API)
 
 ### `update_volatility(pair, price, realized_vol, implied_vol) → bool`
 
@@ -29,7 +46,7 @@ Update volatility metrics for a trading pair.
 **Returns:** `true` if successful, `false` if unauthorized
 
 **Example:**
-```python
+```
 # Update NEO/USDT: price=$15.00, RV=52%, IV=58%
 update_volatility("NEO/USDT", 1500000000, 52000000, 58000000)
 ```
@@ -69,101 +86,65 @@ All numerical values use fixed-point representation with 8 decimal places:
 
 ## Compilation
 
-Compile the contract to Neo bytecode:
+To compile the contract to Neo bytecode:
 
 ```bash
-python compile.py
+# Using boa3 CLI directly
+python -m boa3.cli compile volatility_oracle.py
+
+# This generates:
+# - volatility_oracle.nef - Compiled bytecode
+# - volatility_oracle.manifest.json - Contract ABI and metadata
 ```
 
-This generates:
-- `volatility_oracle.nef` - Compiled bytecode
-- `volatility_oracle.manifest.json` - Contract ABI and metadata
+**Note**: Requires boa3 v1.4.1+ and proper Neo SDK setup
 
-## Deployment
+## Development Notes
 
-### Testnet Deployment
+### boa3 Type System
 
-1. Get testnet GAS from faucet
-2. Deploy using neo-cli or neon:
-   ```bash
-   python deploy.py
-   ```
+boa3 v1.4.1 has strict typing requirements:
+- Use `storage.get_uint160()`, `storage.get_str()`, etc. instead of generic `storage.get()`
+- All function parameters must have type hints
+- Storage keys must be bytes (prefixed with `b''`)
+- Complex string operations may require workarounds
 
-### Mainnet Deployment
+### Next Steps
 
-1. Ensure sufficient GAS available
-2. Deploy contract to mainnet
-3. Update contract address in AgentSpoons configuration
-4. Start publishing volatility feeds
+1. **Resolve compilation issues** with current contract implementation
+   - Ensure all type hints match boa3 requirements
+   - Test with minimal contract first
+   - Gradually add features
 
-## Integration with AgentSpoons
+2. **Test on testnet**
+   - Deploy compiled contract to Neo N3 testnet
+   - Verify all methods execute correctly
+   - Check gas costs
 
-### Data Flow
+3. **Integration**
+   - Create Python client library for contract interaction
+   - Connect to AgentSpoons volatility calculation pipeline
+   - Set up automated data publication
 
-```
-AgentSpoons Agents
-    ↓
-Volatility Calculation
-    ↓
-Neo Contract (on-chain)
-    ↓
-DeFi Protocols, Options Platforms, etc.
-```
+4. **Mainnet deployment**
+   - Audit contract for security
+   - Deploy to Neo N3 mainnet
+   - Monitor contract state
 
-### Usage Example
-
-```python
-from neo3.wallet import Account
-from neo_oracle_client import OracleClient
-
-# Connect to contract
-client = OracleClient(contract_hash="0x...")
-
-# Update volatility
-client.update_volatility(
-    pair="NEO/USDT",
-    price=15.00,
-    realized_vol=0.52,
-    implied_vol=0.58
-)
-
-# Read volatility
-data = client.get_volatility("NEO/USDT")
-print(f"Current volatility: {data['realized_vol']:.2%}")
-```
-
-## Security Considerations
-
-1. **Access Control**: Only authorized addresses can update data
-2. **Timestamp**: Each update includes blockchain timestamp
-3. **Data Validation**: Contract validates input ranges
-4. **Storage**: Efficient storage minimizes state bloat
-
-## Gas Costs
-
-Approximate gas costs on Neo N3:
-
-| Operation | Approx. GAS |
-|-----------|-------------|
-| Update volatility | 0.5-1.0 |
-| Read volatility | 0.1 |
-| Verify | < 0.01 |
-
-## Testing
-
-Test the contract locally:
-
-```bash
-python deploy.py
-```
-
-This shows the deployment workflow and contract interface.
-
-## References
+## Neo N3 Resources
 
 - [Neo N3 Documentation](https://docs.neo.org/)
-- [neo3-boa](https://github.com/CityOfZion/neo3-boa)
-- [neo3-lib](https://github.com/CityOfZion/neo3-lib)
+- [neo3-boa GitHub](https://github.com/CityOfZion/neo3-boa)
+- [neo3-lib GitHub](https://github.com/CityOfZion/neo3-lib)
+- [Neo Smart Contract ABI](https://docs.neo.org/n3/intro/index.html)
+
+## Development Environment
+
+- **Python**: 3.12.4
+- **neo3-boa**: v1.4.1
+- **neo3-lib**: v4.x
+- **neo3crypto**: Latest
+- **neo-mamba**: v3.1.0
 
 ## License
 

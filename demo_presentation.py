@@ -2,6 +2,13 @@
 Interactive demo for presentations
 Shows impressive metrics and live updates
 """
+import sys
+import os
+# Fix encoding for Windows console
+if sys.platform.startswith('win'):
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+
 import dash
 from dash import dcc, html, Input, Output
 import dash_bootstrap_components as dbc
@@ -220,4 +227,4 @@ if __name__ == '__main__':
     print("💡 Perfect for hackathon demos and investor pitches!")
     print("="*70)
     
-    app.run_server(debug=False, port=8888, host='0.0.0.0')
+    app.run(debug=False, port=8888, host='0.0.0.0')

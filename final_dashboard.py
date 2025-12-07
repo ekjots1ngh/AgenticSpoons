@@ -728,4 +728,4 @@ if __name__ == '__main__':
     print('\U0001f310 URL: http://127.0.0.1:9999')
     print('\U0001f4bc All features enabled: real-time data, PDF & Excel exports, contract link')
     print('=' * 70)
-    app.run_server(debug=True, port=9999, host='127.0.0.1')
+    app.run(debug=True, port=9999, host='127.0.0.1')

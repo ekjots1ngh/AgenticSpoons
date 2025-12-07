@@ -3,7 +3,7 @@ AgentSpoons - Championship Dashboard
 This will WIN the hackathon
 """
 import dash
-from dash import dcc, html, Input, Output
+from dash import dcc, html, Input, Output, State
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 import plotly.express as px
@@ -11,25 +11,22 @@ import json
 import os
 from datetime import datetime
 import numpy as np
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from dashboard.themes import get_colors, get_plotly_template, get_chart_colors
 
 # Initialize with dark theme
 app = dash.Dash(
-    __name__, 
-    external_stylesheets=[dbc.themes.CYBORG],
+    __name__,
+    external_stylesheets=[
+        dbc.themes.CYBORG,
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+    ],
     meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}]
 )
 
-# Custom colors
-COLORS = {
-    'background': '#0a0e27',
-    'card': '#1a1f3a',
-    'primary': '#00d4ff',
-    'success': '#51cf66',
-    'warning': '#ffd43b',
-    'danger': '#ff6b6b',
-    'text': '#ffffff',
-    'muted': '#8b92a8'
-}
+# Default to dark theme colors
+COLORS = get_colors('dark')
 
 # ==================== LAYOUT ====================
 app.layout = dbc.Container(fluid=True, style={'backgroundColor': COLORS['background'], 'minHeight': '100vh', 'padding': '0'}, children=[
@@ -58,6 +55,25 @@ app.layout = dbc.Container(fluid=True, style={'backgroundColor': COLORS['backgro
                     })
                 ], style={'display': 'inline-block', 'verticalAlign': 'middle'}),
                 
+                # Theme Toggle Button
+                html.Div([
+                    dbc.Button(
+                        id='theme-toggle',
+                        children=[
+                            html.I(className='fas fa-moon', id='theme-icon', style={'marginRight': '8px'}),
+                            html.Span('Theme')
+                        ],
+                        color='secondary',
+                        outline=True,
+                        size='sm',
+                        style={
+                            'borderRadius': '20px',
+                            'padding': '6px 16px',
+                            'marginRight': '15px'
+                        }
+                    )
+                ], style={'float': 'right', 'marginTop': '20px', 'display': 'inline-block'}),
+
                 # Live Status Badge
                 html.Div([
                     html.Div(id='live-status', children=[
@@ -212,10 +228,32 @@ app.layout = dbc.Container(fluid=True, style={'backgroundColor': COLORS['backgro
     ]),
     
     # Auto-refresh
-    dcc.Interval(id='interval', interval=2000)  # 2 seconds
+    dcc.Interval(id='interval', interval=2000),  # 2 seconds
+
+    # Theme store (persists theme selection in browser localStorage)
+    dcc.Store(id='theme-store', storage_type='local', data='dark')
 ])
 
 # ==================== CALLBACKS ====================
+
+@app.callback(
+    [Output('theme-store', 'data'),
+     Output('theme-icon', 'className')],
+    [Input('theme-toggle', 'n_clicks')],
+    [State('theme-store', 'data')]
+)
+def toggle_theme(n_clicks, current_theme):
+    """Toggle between light and dark themes"""
+    if n_clicks is None:
+        # Initial load - return current theme
+        icon = 'fas fa-sun' if current_theme == 'light' else 'fas fa-moon'
+        return current_theme or 'dark', icon
+
+    # Toggle theme
+    new_theme = 'light' if current_theme == 'dark' else 'dark'
+    icon = 'fas fa-sun' if new_theme == 'light' else 'fas fa-moon'
+
+    return new_theme, icon
 
 def load_data():
     """Load data with comprehensive error handling"""
@@ -246,15 +284,22 @@ def load_data():
      Output('garch-chart', 'figure'),
      Output('stats-panel', 'children'),
      Output('live-status', 'children')],
-    [Input('interval', 'n_intervals')]
+    [Input('interval', 'n_intervals'),
+     Input('theme-store', 'data')]
 )
-def update_dashboard(n):
+def update_dashboard(n, theme):
+    # Get colors for current theme
+    theme = theme or 'dark'
+    COLORS = get_colors(theme)
+    chart_colors = get_chart_colors(theme)
+    plotly_template = get_plotly_template(theme)
+
     data = load_data()
-    
+
     # Default empty state
     empty_fig = go.Figure()
     empty_fig.update_layout(
-        template='plotly_dark',
+        template=plotly_template,
         paper_bgcolor=COLORS['card'],
         plot_bgcolor=COLORS['card'],
         font=dict(color=COLORS['text']),
@@ -292,37 +337,37 @@ def update_dashboard(n):
     
     # === VOLATILITY COMPARISON CHART ===
     vol_fig = go.Figure()
-    
+
     # Realized volatility
     vol_fig.add_trace(go.Scatter(
         y=[d['realized_vol']*100 for d in neo_data],
         mode='lines',
         name='Realized Vol',
-        line=dict(color=COLORS['success'], width=3),
+        line=dict(color=chart_colors['success_line'], width=3),
         fill='tozeroy',
-        fillcolor=f'rgba(81, 207, 102, 0.1)'
+        fillcolor=chart_colors['success_fill']
     ))
-    
+
     # Implied volatility
     vol_fig.add_trace(go.Scatter(
         y=[d['implied_vol']*100 for d in neo_data],
         mode='lines',
         name='Implied Vol',
-        line=dict(color=COLORS['danger'], width=3),
+        line=dict(color=chart_colors['danger_line'], width=3),
         fill='tozeroy',
-        fillcolor=f'rgba(255, 107, 107, 0.1)'
+        fillcolor=chart_colors['danger_fill']
     ))
-    
+
     # GARCH forecast
     vol_fig.add_trace(go.Scatter(
         y=[d['garch_forecast']*100 for d in neo_data],
         mode='lines',
         name='GARCH Forecast',
-        line=dict(color=COLORS['primary'], width=2, dash='dot')
+        line=dict(color=chart_colors['primary_line'], width=2, dash='dot')
     ))
-    
+
     vol_fig.update_layout(
-        template='plotly_dark',
+        template=plotly_template,
         paper_bgcolor=COLORS['card'],
         plot_bgcolor=COLORS['card'],
         font=dict(color=COLORS['text'], size=12),
@@ -354,10 +399,10 @@ def update_dashboard(n):
     ))
     
     # Add zero line
-    spread_fig.add_hline(y=0, line_dash="dash", line_color=COLORS['muted'], line_width=1)
-    
+    spread_fig.add_hline(y=0, line_dash="dash", line_color=chart_colors['zero_line'], line_width=1)
+
     spread_fig.update_layout(
-        template='plotly_dark',
+        template=plotly_template,
         paper_bgcolor=COLORS['card'],
         plot_bgcolor=COLORS['card'],
         font=dict(color=COLORS['text'], size=12),
@@ -374,10 +419,10 @@ def update_dashboard(n):
         y=[d['garch_forecast']*100 for d in neo_data],
         mode='lines+markers',
         name='Forecast',
-        line=dict(color=COLORS['primary'], width=3),
+        line=dict(color=chart_colors['primary_line'], width=3),
         marker=dict(size=4)
     ))
-    
+
     # Add confidence band
     garch_vals = [d['garch_forecast']*100 for d in neo_data]
     garch_fig.add_trace(go.Scatter(
@@ -391,14 +436,14 @@ def update_dashboard(n):
         y=[v*0.9 for v in garch_vals],
         mode='lines',
         line=dict(width=0),
-        fillcolor='rgba(0, 212, 255, 0.1)',
+        fillcolor=chart_colors['primary_fill'],
         fill='tonexty',
         showlegend=False,
         hoverinfo='skip'
     ))
-    
+
     garch_fig.update_layout(
-        template='plotly_dark',
+        template=plotly_template,
         paper_bgcolor=COLORS['card'],
         plot_bgcolor=COLORS['card'],
         font=dict(color=COLORS['text'], size=12),

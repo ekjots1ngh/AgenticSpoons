@@ -1,0 +1,63 @@
+{
+  "generated_at": "2025-12-07T03:00:14.209883",
+  "alert_count": 8,
+  "alerts": [
+    {
+      "type": "PRICE_SPIKE",
+      "severity": "MEDIUM",
+      "message": "Price surged 5.69%",
+      "timestamp": "2025-12-07T03:00:14.206852",
+      "value": 0.05692340059607166
+    },
+    {
+      "type": "VOLATILITY_SPIKE",
+      "severity": "MEDIUM",
+      "message": "Volatility increased 20.17% above average",
+      "timestamp": "2025-12-07T03:00:14.206852",
+      "value": 0.20167527937482538
+    },
+    {
+      "type": "PRICE_SPIKE",
+      "severity": "HIGH",
+      "message": "Price surged 10.85%",
+      "timestamp": "2025-12-07T03:00:14.208870",
+      "value": 0.10851184621604716
+    },
+    {
+      "type": "PRICE_SPIKE",
+      "severity": "MEDIUM",
+      "message": "Price dropped 9.74%",
+      "timestamp": "2025-12-07T03:00:14.208870",
+      "value": -0.09735260179899297
+    },
+    {
+      "type": "VOLATILITY_SPIKE",
+      "severity": "MEDIUM",
+      "message": "Volatility increased 26.75% above average",
+      "timestamp": "2025-12-07T03:00:14.208870",
+      "value": 0.2674871665895654
+    },
+    {
+      "type": "VOLATILITY_SPIKE",
+      "severity": "MEDIUM",
+      "message": "Volatility increased 38.39% above average",
+      "timestamp": "2025-12-07T03:00:14.208870",
+      "value": 0.38394105161073816
+    },
+    {
+      "type": "VOLATILITY_SPIKE",
+      "severity": "MEDIUM",
+      "message": "Volatility increased 20.00% above average",
+      "timestamp": "2025-12-07T03:00:14.208870",
+      "value": 0.20002521448545832
+    },
+    {
+      "type": "SPREAD_ALERT",
+      "severity": "HIGH",
+      "message": "IV-RV spread at 13.00% (25.0% relative)",
+      "timestamp": "2025-12-07T03:00:14.208870",
+      "value": 0.13,
+      "action": "SELL_VOLATILITY"
+    }
+  ]
+}

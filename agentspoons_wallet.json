@@ -1,0 +1,30 @@
+{
+  "name": "AgentSpoons Testnet Wallet",
+  "version": "1.0",
+  "scrypt": {
+    "n": 16384,
+    "r": 8,
+    "p": 8
+  },
+  "accounts": [
+    {
+      "address": "NfdoDDv8xBYnG9aUHtERoQL46pazXvDMtk",
+      "label": "default",
+      "lock": false,
+      "key": "6PYPqvZhLn8pKg15mgrGBXyKy6wYVfF5SibxHNww4kqGJscg6Jnh2zm2Sb",
+      "contract": {
+        "script": "DCECtU8GRenzK0+YYSw/ntznpwUWgV9oXKeBcg0mq+APnqRBVuezJw==",
+        "parameters": [
+          {
+            "name": "signature",
+            "type": "Signature"
+          }
+        ],
+        "deployed": false
+      },
+      "extra": null,
+      "isDefault": true
+    }
+  ],
+  "extra": null
+}

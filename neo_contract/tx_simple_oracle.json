@@ -1,0 +1,242 @@
+{
+  "contract": "Simple Oracle",
+  "simulation": {
+    "state": "HALT",
+    "gasconsumed": "1000093800",
+    "script": "DYACeyJuYW1lIjoic2ltcGxlX29yYWNsZSIsImdyb3VwcyI6W10sImFiaSI6eyJtZXRob2RzIjpbeyJuYW1lIjoiX2RlcGxveSIsIm9mZnNldCI6MTYyLCJwYXJhbWV0ZXJzIjpbeyJ0eXBlIjoiQW55IiwibmFtZSI6ImRhdGEifSx7InR5cGUiOiJCb29sZWFuIiwibmFtZSI6InVwZGF0ZSJ9XSwic2FmZSI6ZmFsc2UsInJldHVybnR5cGUiOiJWb2lkIn0seyJuYW1lIjoidmVyaWZ5Iiwib2Zmc2V0IjowLCJwYXJhbWV0ZXJzIjpbXSwic2FmZSI6ZmFsc2UsInJldHVybnR5cGUiOiJCb29sZWFuIn0seyJuYW1lIjoiZ2V0X293bmVyIiwib2Zmc2V0IjoyLCJwYXJhbWV0ZXJzIjpbXSwic2FmZSI6ZmFsc2UsInJldHVybnR5cGUiOiJIYXNoMTYwIn0seyJuYW1lIjoic2V0X293bmVyIiwib2Zmc2V0Ijo3OSwicGFyYW1ldGVycyI6W3sidHlwZSI6Ikhhc2gxNjAiLCJuYW1lIjoibmV3X293bmVyIn1dLCJzYWZlIjpmYWxzZSwicmV0dXJudHlwZSI6IkJvb2xlYW4ifV0sImV2ZW50cyI6W119LCJwZXJtaXNzaW9ucyI6W10sInRydXN0cyI6W10sImZlYXR1cmVzIjp7fSwic3VwcG9ydGVkc3RhbmRhcmRzIjpbXSwiZXh0cmEiOnsiQXV0aG9yIjoiQWdlbnRTcG9vbnMiLCJEZXNjcmlwdGlvbiI6IlNpbXBsZSB2b2xhdGlsaXR5IG9yYWNsZSJ9fQ0SAU5FRjNuZW8zLWJvYSBieSBDT1otMS40LjEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADECEBXAQAMBW93bmVyQZv2Z85Bkl3oMUrYJhlFDBQAAAAAAAAAAAAAAAAAAAAAAAAAAHBo2CYZDBQAAAAAAAAAAAAAAAAAAAAAAAAAAEBoQFcBAQwFb3duZXJBm/ZnzkGSXegxStgmGUUMFAAAAAAAAAAAAAAAAAAAAAAAAAAAcGjYqmhB+CfsjKqrJgQJQHgMBW93bmVyQZv2Z85B5j8YhAhAVwECeaomHEEtUQgwE85waAwFb3duZXJBm/ZnzkHmPxiEQOii+wQSwB8MBmRlcGxveQwU/aP6Q0bqUyolj8SX3a3bZDfJ/f9BYn1bUg==",
+    "stack": [
+      {
+        "type": "Array",
+        "value": [
+          {
+            "type": "Integer",
+            "value": "2848"
+          },
+          {
+            "type": "Integer",
+            "value": "0"
+          },
+          {
+            "type": "ByteString",
+            "value": "OwhZgXs7OticGfEBaaYmM4eSB60="
+          },
+          {
+            "type": "ByteString",
+            "value": "TkVGM25lbzMtYm9hIGJ5IENPWi0xLjQuMQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMQIQFcBAAwFb3duZXJBm/ZnzkGSXegxStgmGUUMFAAAAAAAAAAAAAAAAAAAAAAAAAAAcGjYJhkMFAAAAAAAAAAAAAAAAAAAAAAAAAAAQGhAVwEBDAVvd25lckGb9mfOQZJd6DFK2CYZRQwUAAAAAAAAAAAAAAAAAAAAAAAAAABwaNiqaEH4J+yMqqsmBAlAeAwFb3duZXJBm/ZnzkHmPxiECEBXAQJ5qiYcQS1RCDATznBoDAVvd25lckGb9mfOQeY/GIRA6KL7BA=="
+          },
+          {
+            "type": "Struct",
+            "value": [
+              {
+                "type": "ByteString",
+                "value": "c2ltcGxlX29yYWNsZQ=="
+              },
+              {
+                "type": "Array",
+                "value": []
+              },
+              {
+                "type": "Map",
+                "value": []
+              },
+              {
+                "type": "Array",
+                "value": []
+              },
+              {
+                "type": "Struct",
+                "value": [
+                  {
+                    "type": "Array",
+                    "value": [
+                      {
+                        "type": "Struct",
+                        "value": [
+                          {
+                            "type": "ByteString",
+                            "value": "X2RlcGxveQ=="
+                          },
+                          {
+                            "type": "Array",
+                            "value": [
+                              {
+                                "type": "Struct",
+                                "value": [
+                                  {
+                                    "type": "ByteString",
+                                    "value": "ZGF0YQ=="
+                                  },
+                                  {
+                                    "type": "Integer",
+                                    "value": "0"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "Struct",
+                                "value": [
+                                  {
+                                    "type": "ByteString",
+                                    "value": "dXBkYXRl"
+                                  },
+                                  {
+                                    "type": "Integer",
+                                    "value": "16"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "Integer",
+                            "value": "255"
+                          },
+                          {
+                            "type": "Integer",
+                            "value": "162"
+                          },
+                          {
+                            "type": "Boolean",
+                            "value": false
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Struct",
+                        "value": [
+                          {
+                            "type": "ByteString",
+                            "value": "dmVyaWZ5"
+                          },
+                          {
+                            "type": "Array",
+                            "value": []
+                          },
+                          {
+                            "type": "Integer",
+                            "value": "16"
+                          },
+                          {
+                            "type": "Integer",
+                            "value": "0"
+                          },
+                          {
+                            "type": "Boolean",
+                            "value": false
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Struct",
+                        "value": [
+                          {
+                            "type": "ByteString",
+                            "value": "Z2V0X293bmVy"
+                          },
+                          {
+                            "type": "Array",
+                            "value": []
+                          },
+                          {
+                            "type": "Integer",
+                            "value": "20"
+                          },
+                          {
+                            "type": "Integer",
+                            "value": "2"
+                          },
+                          {
+                            "type": "Boolean",
+                            "value": false
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Struct",
+                        "value": [
+                          {
+                            "type": "ByteString",
+                            "value": "c2V0X293bmVy"
+                          },
+                          {
+                            "type": "Array",
+                            "value": [
+                              {
+                                "type": "Struct",
+                                "value": [
+                                  {
+                                    "type": "ByteString",
+                                    "value": "bmV3X293bmVy"
+                                  },
+                                  {
+                                    "type": "Integer",
+                                    "value": "20"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "Integer",
+                            "value": "16"
+                          },
+                          {
+                            "type": "Integer",
+                            "value": "79"
+                          },
+                          {
+                            "type": "Boolean",
+                            "value": false
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Array",
+                    "value": []
+                  }
+                ]
+              },
+              {
+                "type": "Array",
+                "value": []
+              },
+              {
+                "type": "Array",
+                "value": []
+              },
+              {
+                "type": "ByteString",
+                "value": "eyJBdXRob3IiOiJBZ2VudFNwb29ucyIsIkRlc2NyaXB0aW9uIjoiU2ltcGxlIHZvbGF0aWxpdHkgb3JhY2xlIn0="
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "exception": null,
+    "notifications": [
+      {
+        "contract": "0xfffdc93764dbaddd97c48f252a53ea4643faa3fd",
+        "eventname": "Deploy",
+        "state": {
+          "type": "Array",
+          "value": [
+            {
+              "type": "ByteString",
+              "value": "OwhZgXs7OticGfEBaaYmM4eSB60="
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "estimated_gas": 10.000938,
+  "wallet": "NVLMjeu3Z1feMuN6HEcmLayyM7m5KsJTRX",
+  "instructions": [
+    "1. Use neo-cli: deploy neo_contract/simple_oracle.nef",
+    "2. Or use neo-python with your private key",
+    "3. Or import wallet to NEO IDE and deploy there"
+  ]
+}

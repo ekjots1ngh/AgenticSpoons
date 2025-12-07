@@ -1,0 +1,14 @@
+
+{
+    "jsonrpc": "2.0",
+    "method": "invokefunction",
+    "params": [
+        "0xfffdc93764dbaddd97c48f252a53ea4643faa3fd",
+        "deploy",
+        [
+            {"type": "ByteArray", "value": "TkVGM25lbzMtYm9hIGJ5IENPWi0xLjQuMQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP2KAVcBAQwFb3duZXJBm/ZnzkGSXegxStgmGUUMFAAAAAAAAAAAAAAAAAAAAAAAAAAAcGjYqmhB+CfsjKqrJgQJQHgMBW93bmVyQZv2Z85B5j8YhAhAVwEADAVvd25lckGb9mfOQZJd6DFK2CYZRQwUAAAAAAAAAAAAAAAAAAAAAAAAAABwaNgmGQwUAAAAAAAAAAAAAAAAAAAAAAAAAABAaEBXAwQMBW93bmVyQZv2Z85Bkl3oMUrYJhlFDBQAAAAAAAAAAAAAAAAAAAAAAAAAAHBo2GhB+CfsjKqsJgQJQEG3w4gDcXkDABCl1OgAAACgegJAQg8AoJ57nnJqDARkYXRhQZv2Z85B5j8YhGkMAnRzQZv2Z85B5j8YhAhAVwEADARkYXRhQZv2Z85Bkl3oMUrYJgZFECIE2yFwaNgmBBBAaEBXAQAMAnRzQZv2Z85Bkl3oMUrYJgZFECIE2yFwaNgmBBBAaEAIQFcBAnmqJhxBLVEIMBPOcGgMBW93bmVyQZv2Z85B5j8YhEB349C2"},
+            {"type": "String", "value": "{"name":"volatility_oracle","groups":[],"abi":{"methods":[{"name":"_deploy","offset":360,"parameters":[{"type":"Any","name":"data"},{"type":"Boolean","name":"update"}],"safe":false,"returntype":"Void"},{"name":"set_owner","offset":0,"parameters":[{"type":"Hash160","name":"new_owner"}],"safe":false,"returntype":"Boolean"},{"name":"get_owner","offset":83,"parameters":[],"safe":false,"returntype":"Hash160"},{"name":"store_volatility","offset":160,"parameters":[{"type":"Integer","name":"pair_id"},{"type":"Integer","name":"price"},{"type":"Integer","name":"realized_vol"},{"type":"Integer","name":"implied_vol"}],"safe":false,"returntype":"Boolean"},{"name":"get_volatility","offset":284,"parameters":[],"safe":false,"returntype":"Integer"},{"name":"get_timestamp","offset":322,"parameters":[],"safe":false,"returntype":"Integer"},{"name":"verify","offset":358,"parameters":[],"safe":false,"returntype":"Boolean"}],"events":[]},"permissions":[],"trusts":[],"features":{},"supportedstandards":[],"extra":{"Author":"AgentSpoons","Email":"dev@agentspoons.io","Description":"On-chain volatility oracle for trading pairs"}}"}
+        ]
+    ],
+    "id": 1
+}

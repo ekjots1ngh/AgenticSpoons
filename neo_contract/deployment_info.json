@@ -1,0 +1,29 @@
+{
+  "contract_name": "AgentSpoons Volatility Oracle",
+  "nef_file": "volatility_oracle.nef",
+  "manifest_file": "volatility_oracle.manifest.json",
+  "deployer_address": "NVLMjeu3Z1feMuN6HEcmLayyM7m5KsJTRX",
+  "network": "testnet",
+  "rpc_url": "https://testnet1.neo.coz.io:443",
+  "testnet_magic": 894710606,
+  "deployment_method": "pending",
+  "contract_hash": "pending_deployment",
+  "estimated_gas_cost": "10-15 GAS",
+  "wallet_balance": "50 GAS available",
+  "methods": [
+    "_deploy(data, update)",
+    "store_volatility(pair_id, price, realized_vol, implied_vol)",
+    "get_volatility()",
+    "get_timestamp()",
+    "set_owner(new_owner)",
+    "get_owner()",
+    "verify()"
+  ],
+  "next_steps": [
+    "1. Choose deployment method above",
+    "2. Deploy contract and SAVE the contract hash",
+    "3. Test by calling store_volatility()",
+    "4. Verify with get_volatility()",
+    "5. Integrate with AgentSpoons data pipeline"
+  ]
+}

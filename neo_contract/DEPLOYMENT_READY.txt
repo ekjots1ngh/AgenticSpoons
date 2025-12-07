@@ -1,0 +1,36 @@
+NEO N3 SMART CONTRACT DEPLOYMENT GUIDE
+======================================
+
+Your contracts are COMPILED, VALIDATED, and READY for deployment!
+
+CONTRACTS:
+- simple_oracle.nef (274 bytes) - 4 methods
+- volatility_oracle.nef (474 bytes) - 7 methods
+
+WALLET:
+- Address: NVLMjeu3Z1feMuN6HEcmLayyM7m5KsJTRX
+- Balance: 50 GAS
+- Private Key (WIF): L3ZFHMjexgsAmPRkYHGpVs58vbwEpdFNXBDDZo7JMMWm7n9XGpbb
+
+QUICKEST METHOD - NEO-CLI:
+=========================
+1. Download: https://github.com/neo-project/neo-cli/releases/latest
+2. Extract and run neo-cli.exe
+3. Commands:
+
+import key L3ZFHMjexgsAmPRkYHGpVs58vbwEpdFNXBDDZo7JMMWm7n9XGpbb
+deploy D:\Agentic Spoons\agentspoons\neo_contract\simple_oracle.nef
+deploy D:\Agentic Spoons\agentspoons\neo_contract\volatility_oracle.nef
+
+4. SAVE THE CONTRACT HASHES after deployment!
+
+Cost: ~20 GAS total (you have 50 GAS available)
+
+Alternative Methods:
+- Neon Wallet (GUI): https://neon.coz.io/
+- Neo IDE (Online): https://ide.neo.org/
+- Neo Express (Local testing): dotnet tool install -g Neo.Express
+
+After deployment, check contracts at:
+https://testnet.neotube.io/
+

@@ -1,0 +1,14 @@
+
+{
+    "jsonrpc": "2.0",
+    "method": "invokefunction",
+    "params": [
+        "0xfffdc93764dbaddd97c48f252a53ea4643faa3fd",
+        "deploy",
+        [
+            {"type": "ByteArray", "value": "TkVGM25lbzMtYm9hIGJ5IENPWi0xLjQuMQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMQIQFcBAAwFb3duZXJBm/ZnzkGSXegxStgmGUUMFAAAAAAAAAAAAAAAAAAAAAAAAAAAcGjYJhkMFAAAAAAAAAAAAAAAAAAAAAAAAAAAQGhAVwEBDAVvd25lckGb9mfOQZJd6DFK2CYZRQwUAAAAAAAAAAAAAAAAAAAAAAAAAABwaNiqaEH4J+yMqqsmBAlAeAwFb3duZXJBm/ZnzkHmPxiECEBXAQJ5qiYcQS1RCDATznBoDAVvd25lckGb9mfOQeY/GIRA6KL7BA=="},
+            {"type": "String", "value": "{"name":"simple_oracle","groups":[],"abi":{"methods":[{"name":"_deploy","offset":162,"parameters":[{"type":"Any","name":"data"},{"type":"Boolean","name":"update"}],"safe":false,"returntype":"Void"},{"name":"verify","offset":0,"parameters":[],"safe":false,"returntype":"Boolean"},{"name":"get_owner","offset":2,"parameters":[],"safe":false,"returntype":"Hash160"},{"name":"set_owner","offset":79,"parameters":[{"type":"Hash160","name":"new_owner"}],"safe":false,"returntype":"Boolean"}],"events":[]},"permissions":[],"trusts":[],"features":{},"supportedstandards":[],"extra":{"Author":"AgentSpoons","Description":"Simple volatility oracle"}}"}
+        ]
+    ],
+    "id": 1
+}

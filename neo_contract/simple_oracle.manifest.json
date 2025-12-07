@@ -1,0 +1,59 @@
+{
+    "name": "simple_oracle",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "_deploy",
+                "offset": 162,
+                "parameters": [
+                    {
+                        "type": "Any",
+                        "name": "data"
+                    },
+                    {
+                        "type": "Boolean",
+                        "name": "update"
+                    }
+                ],
+                "safe": false,
+                "returntype": "Void"
+            },
+            {
+                "name": "verify",
+                "offset": 0,
+                "parameters": [],
+                "safe": false,
+                "returntype": "Boolean"
+            },
+            {
+                "name": "get_owner",
+                "offset": 2,
+                "parameters": [],
+                "safe": false,
+                "returntype": "Hash160"
+            },
+            {
+                "name": "set_owner",
+                "offset": 79,
+                "parameters": [
+                    {
+                        "type": "Hash160",
+                        "name": "new_owner"
+                    }
+                ],
+                "safe": false,
+                "returntype": "Boolean"
+            }
+        ],
+        "events": []
+    },
+    "permissions": [],
+    "trusts": [],
+    "features": {},
+    "supportedstandards": [],
+    "extra": {
+        "Author": "AgentSpoons",
+        "Description": "Simple volatility oracle"
+    }
+}
